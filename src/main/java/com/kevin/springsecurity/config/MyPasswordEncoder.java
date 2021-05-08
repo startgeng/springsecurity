@@ -2,6 +2,7 @@ package com.kevin.springsecurity.config;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.DigestUtils;
 
 /**
  * @author kevin
@@ -12,12 +13,11 @@ import org.springframework.stereotype.Component;
 public class MyPasswordEncoder implements PasswordEncoder {
     @Override
     public String encode(CharSequence charSequence) {
-
-        return charSequence.toString();
+        return DigestUtils.md5DigestAsHex(charSequence.toString().getBytes());
     }
 
     @Override
     public boolean matches(CharSequence charSequence, String s) {
-        return s.equals(charSequence);
+        return s.equals(DigestUtils.md5DigestAsHex(charSequence.toString().getBytes()));
     }
 }

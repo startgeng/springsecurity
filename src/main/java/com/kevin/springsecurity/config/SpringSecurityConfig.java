@@ -1,5 +1,7 @@
 package com.kevin.springsecurity.config;
 
+import com.kevin.springsecurity.service.MyUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,6 +17,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private MyUserService userService;
 
     /**
      * 放行 js css images security 不做拦截
@@ -53,5 +58,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.inMemoryAuthentication().withUser("admin").password("123456").roles("admin");
 //        auth.inMemoryAuthentication().passwordEncoder(new MyPasswordEncoder()).withUser("cxh").password("cxh").roles("ADMIN");
         auth.inMemoryAuthentication().withUser("demo").password("demo").roles("USER");
+
+        //自定义查库的实现
+        auth.userDetailsService(userService).passwordEncoder(new MyPasswordEncoder());
     }
 }
